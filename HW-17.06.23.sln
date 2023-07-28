@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maze", "Maze\Maze.csproj", "{5D0105C8-354D-4431-BD4E-BAAD77AC4D1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "17.06.23", "Maze\17.06.23.csproj", "{5D0105C8-354D-4431-BD4E-BAAD77AC4D1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

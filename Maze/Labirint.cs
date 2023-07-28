@@ -21,6 +21,9 @@ namespace Maze
         public static int countMedal = 0;
         public static int countMedalAll = 0;
         public static int health = 100;
+        public static DateTime dt = DateTime.MinValue;
+        public static int step = 0;
+
         public Form parent;
        
         public Labirint(Form parent, int width, int height)

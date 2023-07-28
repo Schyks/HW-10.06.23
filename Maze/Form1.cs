@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -27,7 +28,7 @@ namespace Maze
             BackColor = Color.FromArgb(255, 92, 118, 137);
             
             // размеры клиентской области формы (того участка, на котором размещаются ЭУ)
-            ClientSize = new Size(columns * pictureSize, rows * pictureSize);
+            ClientSize = new Size(columns * pictureSize, rows * pictureSize+25);
 
             StartPosition = FormStartPosition.CenterScreen;
         }
@@ -36,6 +37,7 @@ namespace Maze
         {
             l = new Labirint(this, columns, rows);
             Text = $"Maze!  Всього медалей: {Labirint.countMedalAll}   Зібрано: {Labirint.countMedal}    Здоров'я: {Labirint.health}";
+            timer1.Start();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -53,7 +55,8 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
-                    
+                    Labirint.step++;
+
                 }
                 else if (l.objects[l.CharacterPositionY, l.CharacterPositionX + 1].type ==
                     MazeObject.MazeObjectType.MEDAL) // проверяем ячейку правее на 1 позицию, является ли она медалью
@@ -68,8 +71,11 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
+
                     if (Labirint.countMedal == Labirint.countMedalAll)
                     {
+                        timer1.Stop();
                         MessageBox.Show("Перемога.\n\nВсі медалі зібрано!!!");
                     }
                 }
@@ -86,6 +92,8 @@ namespace Maze
                         l.CharacterPositionX++;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                        Labirint.step++;
+
                     }
                 }
                 else if (l.objects[l.CharacterPositionY, l.CharacterPositionX + 1].type ==
@@ -102,11 +110,14 @@ namespace Maze
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
                         if (Labirint.health <= 0) { MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
+                        Labirint.step++;
+
                     }
                 }
 
                 if (l.objects[l.CharacterPositionY, l.CharacterPositionX] == l.objects[rows - 3, columns - 1])
                 {
+                    timer1.Stop();
                     MessageBox.Show("Перемога.\n\nВихід знайдено!!!");
                 }
             }
@@ -122,6 +133,7 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
                 }
                 else if (l.objects[l.CharacterPositionY, l.CharacterPositionX - 1].type ==
                    MazeObject.MazeObjectType.MEDAL) // проверяем ячейку левее на 1 позицию, является ли она медалью
@@ -136,9 +148,11 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
-                   
+                    Labirint.step++;
+
                     if (Labirint.countMedal == Labirint.countMedalAll)
                     {
+                        timer1.Stop();
                         MessageBox.Show("Перемога.\n\nВсі медалі зібрано!!!");
                     }
                 }
@@ -155,6 +169,7 @@ namespace Maze
                         l.CharacterPositionX--;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                        Labirint.step++;
                     }
                 }
                 else if (l.objects[l.CharacterPositionY, l.CharacterPositionX - 1].type ==
@@ -169,8 +184,12 @@ namespace Maze
                         l.CharacterPositionX--;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
-                        if (Labirint.health <= 0) { MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
-                    }
+                        Labirint.step++;
+                        if (Labirint.health <= 0)
+                        {
+                            timer1.Stop();
+                            MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
+                        }
                 }
             }
             else if (e.KeyCode == Keys.Down)
@@ -185,6 +204,7 @@ namespace Maze
                     
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
                 }
                 else if (l.objects[l.CharacterPositionY + 1, l.CharacterPositionX].type ==
                    MazeObject.MazeObjectType.MEDAL) // проверяем ячейку ниже на 1 позицию, является ли она медалью
@@ -199,8 +219,10 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
                     if (Labirint.countMedal == Labirint.countMedalAll)
                     {
+                        timer1.Stop();
                         MessageBox.Show("Перемога.\n\nВсі медалі зібрано!!!");
                     }
                 }
@@ -217,6 +239,7 @@ namespace Maze
                         l.CharacterPositionY++;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                        Labirint.step++;
                     }
                 }
                 else if (l.objects[l.CharacterPositionY+1, l.CharacterPositionX].type ==
@@ -232,7 +255,11 @@ namespace Maze
                         l.CharacterPositionY++;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
-                        if (Labirint.health <= 0) { MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
+                        Labirint.step++;
+                        if (Labirint.health <= 0)
+                        {
+                            timer1.Stop();
+                            MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
                     }
                 }
             }
@@ -248,6 +275,7 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
                 }
                 else if (l.objects[l.CharacterPositionY - 1, l.CharacterPositionX].type ==
                    MazeObject.MazeObjectType.MEDAL) // проверяем ячейку вверху на 1 позицию, является ли она медалью
@@ -263,8 +291,10 @@ namespace Maze
 
                     l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                     l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                    Labirint.step++;
                     if (Labirint.countMedal == Labirint.countMedalAll)
                     {
+                        timer1.Stop();
                         MessageBox.Show("Перемога.\n\nВсі медалі зібрано!!!");
                     }
                 }
@@ -281,6 +311,7 @@ namespace Maze
                         l.CharacterPositionY--;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
+                        Labirint.step++;
                     }
                 }
                 else if (l.objects[l.CharacterPositionY - 1, l.CharacterPositionX].type ==
@@ -296,10 +327,24 @@ namespace Maze
                         l.CharacterPositionY--;
                         l.objects[l.CharacterPositionY, l.CharacterPositionX].texture = MazeObject.images[4]; // character
                         l.images[l.CharacterPositionY, l.CharacterPositionX].BackgroundImage = l.objects[l.CharacterPositionY, l.CharacterPositionX].texture;
-                        if (Labirint.health <= 0) { MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
+                        Labirint.step++;
+                        if (Labirint.health <= 0)
+                        {
+                            timer1.Stop();
+                            MessageBox.Show("Поразка.\n\nЗдоров'я закінчилося!!!"); }
                     }
                 }
             }
+        }
+
+        private void timer1_Tick(object sender, System.EventArgs e)
+        {
+            string str;
+            Labirint.dt = Labirint.dt.AddSeconds(1);
+            str = Labirint.dt.ToLongTimeString();
+            this.toolStripStatusLabel1.Text = "Ігровий час:   "+str+"       Здоров'я:";
+            this.toolStripStatusLabel2.Text="      Кількість кроків - " +Labirint.step.ToString();
+            this.toolStripProgressBar1.Value = Labirint.health;
         }
     }
 }
